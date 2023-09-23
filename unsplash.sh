@@ -2,7 +2,7 @@
 # Images are taken from the "hell so easy to use (basic) API" of Unsplash, they are totally free for all use.
 
 # The downloaded images are kept in ~/.local/share/unsplashLinux if the following switch is false.
-DO_WE_ERASE_FILES=true
+DO_WE_BACKUP_FILES=false
 
 # Category of the collection that will have the image randomized choosen from.
 # CATEGORY=1339090 # 4k
@@ -13,7 +13,6 @@ SIZE=5472x3648   #
 WORKDIR=$HOME'/.local/share/unsplashLinux/'
 
 PLAIN_IMAGE="plain"
-ENHANCED_IMAGE="enhanced"
 
 RANT=$(date +%s)
 
@@ -29,11 +28,8 @@ else
 	exit 1
 fi
 
-if $DO_WE_ERASE_FILES
-then
-  rm $WORKDIR$PLAIN_IMAGE'.jpg' 2> /dev/null
-else
-  cp $WORKDIR$ENHANCED_IMAGE'.jpg' $WORKDIR'old/'$RANT'.jpg'
+if $DO_WE_BACKUP_FILES; then
+  cp $WORKDIR$PLAIN_IMAGE'.jpg' $WORKDIR'old/'$RANT'.jpg'
 fi
 
 # Image file name
@@ -68,6 +64,7 @@ echo $WALLPAPER
 if [ "`lsb_release -is`" = "Deepin" ]; then
 	gsettings set com.deepin.wrap.gnome.desktop.background picture-uri ${WALLPAPER}
 else
-	gsettings set org.gnome.desktop.background picture-uri 'file://'${WALLPAPER}
-	gsettings set org.gnome.desktop.screensaver picture-uri 'file://'${WALLPAPER}
+	gsettings set org.gnome.desktop.background picture-uri "file://${WALLPAPER}"
+	gsettings set org.gnome.desktop.screensaver picture-uri "file://${WALLPAPER}"
+	gsettings set org.gnome.desktop.background picture-uri-dark "file://${WALLPAPER}"
 fi  
